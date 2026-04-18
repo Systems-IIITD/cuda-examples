@@ -48,7 +48,7 @@ static void initArray(half *arr, size_t x, size_t y) {
 	}
 }
 
-#define PAD 16
+#define PAD 8  // used to reduce bank conflicts
 
 __global__ void matmul2D(half *A, half *B, float *C) {
 
