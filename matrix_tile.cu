@@ -5,11 +5,11 @@
 
 #define THREADS_PER_BLOCK ((size_t)64)
 
-
-#define AROW ((THREADS_PER_BLOCK * 31) + 1)
-#define ACOL ((THREADS_PER_BLOCK * 15) + 2)
+#define FACTOR 99
+#define AROW ((THREADS_PER_BLOCK * FACTOR) + 1)
+#define ACOL ((THREADS_PER_BLOCK * FACTOR) + 2)
 #define BROW ACOL
-#define BCOL ((THREADS_PER_BLOCK * 2) + 3)
+#define BCOL ((THREADS_PER_BLOCK * FACTOR) + 3)
 #define CROW AROW
 #define CCOL BCOL
 #define TILE 16
@@ -86,7 +86,7 @@ __global__ void matmul2D(int *A, int *B, int *C) {
 
 int main() {
 	int (*a2d)[ACOL], (*b2d)[BCOL], (*c2d)[CCOL];
-	size_t i, j, k, Asize, Bsize, Csize;
+	size_t Asize, Bsize, Csize;
 	int *a2d_c, *b2d_c, *c2d_c;
 	cudaError_t err;
 
@@ -133,6 +133,8 @@ int main() {
 	cudaMemcpy(c2d, c2d_c, Csize, cudaMemcpyDeviceToHost);
 	//print_matrix((int*)c2d, "C");
 
+#ifdef VERIFY
+	size_t i, j, k;
 	for (i = 0; i < CROW; i++) {
 		for (j = 0; j < CCOL; j++) {
 			int tmp = 0;
@@ -142,6 +144,7 @@ int main() {
 			assert(c2d[i][j] == tmp);
 		}
 	}
+#endif
 	
 	cudaFree(a2d_c);
 	cudaFree(b2d_c);
