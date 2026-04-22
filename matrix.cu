@@ -4,7 +4,7 @@
 #include <cuda_runtime.h>
 
 #define THREADS_PER_BLOCK ((size_t)64)
-#define FACTOR 200
+#define FACTOR 99
 
 #define AROW ((THREADS_PER_BLOCK * FACTOR) + 1)
 #define ACOL ((THREADS_PER_BLOCK * FACTOR) + 2)
